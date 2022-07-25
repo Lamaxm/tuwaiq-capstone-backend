@@ -1,16 +1,10 @@
-from rest_framework.decorators import api_view, authentication_classes,permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
-
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from rest_framework_simplejwt.tokens import AccessToken,Token
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
-
-from .serializers import UserRegisterSerializer
+from rest_framework_simplejwt.tokens import AccessToken
 
 
 
@@ -29,5 +23,5 @@ def login_user(request : Request):
             return Response(responseData)
 
 
-    return Response({"msg" : "please provide your username & password"}, status=status.HTTP_401_UNAUTHORIZED)
+    return Response({"msg" : "please provide your username or password"}, status=status.HTTP_401_UNAUTHORIZED)
 
