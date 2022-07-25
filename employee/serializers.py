@@ -1,13 +1,15 @@
 from rest_framework import serializers
-from .models import User, profile
+from .models import Employee , Fav
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['email', 'username', 'password']
+class EmployeesSerializer(serializers.ModelSerializer):
+    """For Serializing Comment"""
+    class Meta :
+        model = Employee
+        fields = '__all__'
 
-class profileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = profile
+class FavSerializer(serializers.ModelSerializer):
+    """For Serializing Comment"""
+    class Meta :
+        model = Fav
         fields = '__all__'
