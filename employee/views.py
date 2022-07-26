@@ -57,13 +57,13 @@ def get_emp(request : Request):
 # Get Company ID Employees
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-def get_comp_emp(request : Request):
+def get_comp_emp(request : Request, profile_id):
     '''list the company's employees'''
     user:User = request.user
     if not user.is_authenticated:
-        return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-
-    emps = Employee.objects.filter(user=user.id)
+        return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)    
+    
+    emps = Employee.objects.filter(company= profile_id)
     dataResponse = {
         "msg" : "List of All company employees",
         "employees" : EmployeesSerializer(instance=emps, many=True).data
@@ -154,6 +154,7 @@ def get_req(request: Request):
     }
 
     return Response(dataResponse)
+
 
 # Delete ID Request
 @api_view(['DELETE'])

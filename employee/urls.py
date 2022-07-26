@@ -7,7 +7,7 @@ urlpatterns = [
     # CRUD Employee
     path("add_emp/", views.add_emp, name="add_emp"),
     path("get_emp/", views.get_emp, name="get_emp"),
-    path("my_emp/", views.get_comp_emp, name="get_comp_emp"),
+    path("my_emp/<profile_id>", views.get_comp_emp, name="get_comp_emp"),
     path("edit_emp/", views.edit_emp, name="edit_emp"),
     path("delete_emp/", views.delete_emp, name="delete_emp"),
     # ---
