@@ -1,20 +1,19 @@
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
-from django.core import serializers
 
 from .models import Employee, Fav, ReqEmployee
 from .serializers import EmployeesSerializer, FavSerializer, ReqEmployeeSerializer
+from user.models import Profile
 
 
 # Add New Employee 
 @api_view(['POST'])
 @authentication_classes([JWTAuthentication])
-def add_emp(request: Request):
+def add_emp(request: Request, profile_id):
 
     ''' 
         This function is to add a new employee.
@@ -23,7 +22,8 @@ def add_emp(request: Request):
     if not user.is_authenticated:
         return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    request.data.update(user=request.user.id)
+    profile = Profile.objects.get(id=profile_id)
+    request.data.update(user=request.user.id, profile=profile.id)
     new_employee = EmployeesSerializer(data=request.data)
     if new_employee.is_valid():
         new_employee.save()
@@ -33,6 +33,7 @@ def add_emp(request: Request):
         }
         return Response(dataResponse)
     else:
+        print(new_employee.errors)
         dataResponse = {"msg" : "couldn't create an employee!"}
         return Response( dataResponse, status=status.HTTP_400_BAD_REQUEST)
 
