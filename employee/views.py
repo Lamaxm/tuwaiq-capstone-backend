@@ -3,8 +3,6 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
-from .models import Games, Wishlist
-from .serializers import GamesSerializer, GamesSerializerView, WishListSerializer, WishListSerializerView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core import serializers
@@ -218,7 +216,7 @@ def reqEmp(request: Request):
     fav = ReqEmployee.objects.filter(user=user.id)
     dataResponse = {
         "msg" : "List of your fav employees",
-        "fev" : ReqEmployeeSerializer(instance=fev, many=True).data
+        "fev" : ReqEmployeeSerializer(instance=fav, many=True).data
     }
 
     return Response(dataResponse)
