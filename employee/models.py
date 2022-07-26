@@ -10,7 +10,6 @@ class Employee(models.Model):
     state = models.BooleanField(default=False)
     add_date = models.DateField(auto_now_add=True , blank=True)
     company = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

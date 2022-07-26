@@ -13,7 +13,7 @@ from user.models import Profile
 # Add New Employee 
 @api_view(['POST'])
 @authentication_classes([JWTAuthentication])
-def add_emp(request: Request, profile_id):
+def add_emp(request: Request):
 
     ''' 
         This function is to add a new employee.
@@ -22,8 +22,8 @@ def add_emp(request: Request, profile_id):
     if not user.is_authenticated:
         return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    profile = Profile.objects.get(id=profile_id)
-    request.data.update(user=request.user.id, profile=profile.id)
+    profile = Profile.objects.get(user=request.user)
+    request.data.update(user=profile.id)
     new_employee = EmployeesSerializer(data=request.data)
     if new_employee.is_valid():
         new_employee.save()

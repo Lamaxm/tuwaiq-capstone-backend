@@ -5,7 +5,7 @@ app_name = "emp"
 
 urlpatterns = [
     # CRUD Employee
-    path("addemp/<profile_id>", views.add_emp, name="add_emp"),
+    path("addemp/", views.add_emp, name="add_emp"),
     path("emp/allemps", views.get_emp, name="get_emp"),
     path("emp/myemps", views.get_comp_emp, name="get_comp_emp"),
     path("emp/editemp", views.edit_emp, name="edit_emp"),
