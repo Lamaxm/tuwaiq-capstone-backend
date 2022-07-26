@@ -11,7 +11,6 @@ from .models import Employee, Fav, ReqEmployee
 from .serializers import EmployeesSerializer, FavSerializer, ReqEmployeeSerializer
 
 
-
 # Add New Employee 
 @api_view(['POST'])
 @authentication_classes([JWTAuthentication])
@@ -40,7 +39,7 @@ def add_emp(request: Request):
 # Get All Employees
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-def all_employee(request : Request):
+def get_emp(request : Request):
     ''' 
         This function is to view all employees.
     '''
@@ -57,7 +56,7 @@ def all_employee(request : Request):
 # Get Company ID Employees
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-def com_employees(request : Request):
+def get_comp_emp(request : Request):
     '''list the company's employees'''
     user:User = request.user
     if not user.is_authenticated:
@@ -139,7 +138,7 @@ def add_req(request:Request, emp_id):
 # Get Company ID Request - Received  request (for the company the employee belongs to)
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-def req_Emp(request: Request):
+def get_req(request: Request):
     ''' 
     This function is to list all of the requests
     '''
@@ -205,7 +204,7 @@ def add_fav(request:Request, emp_id):
 # Get Fav
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-def reqEmp(request: Request):
+def get_fav(request: Request):
     ''' 
     This function is to list all of the fav employees
     '''
@@ -224,7 +223,7 @@ def reqEmp(request: Request):
 # Delete fav
 @api_view(['DELETE'])
 @authentication_classes([JWTAuthentication])
-def delete_req(request: Request, emp_id):
+def delete_fav(request: Request, emp_id):
     '''
         Delete an emp from fav
     '''
