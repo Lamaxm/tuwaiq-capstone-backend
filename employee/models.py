@@ -16,7 +16,8 @@ class Employee(models.Model):
 
 class ReqEmployee(models.Model):
     emp = models.ForeignKey(Employee,on_delete=models.CASCADE)
-    company = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    company = models.ForeignKey(Profile, on_delete=models.CASCADE) 
+    
 
 
 class Fav(models.Model):

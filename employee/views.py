@@ -22,8 +22,8 @@ def add_emp(request: Request):
     if not user.is_authenticated:
         return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    profile = Profile.objects.get(user=request.user)
-    request.data.update(user=profile.id)
+    profile = Profile.objects.get(user=user)
+    request.data.update(company=profile.id)
     new_employee = EmployeesSerializer(data=request.data)
     if new_employee.is_valid():
         new_employee.save()
@@ -116,30 +116,34 @@ def add_req(request:Request, emp_id):
         this function adds a new request 
     '''
     user:User = request.user
-    emp = Employee.objects.get(id=emp_id)
+    employee = Employee.objects.get(id=emp_id)
+    profile = Profile.objects.get(user=request.user)
     if not user.is_authenticated:
         return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-    if ReqEmployee.objects.filter(user=request.user.id , employee=emp).exists():
-        return Response({"msg" : "You have already created a request !"}, status=status.HTTP_400_BAD_REQUEST)
-    request.data.update(user=request.user.id, employee=emp.id)
+    if ReqEmployee.objects.filter(company=profile.id, emp=employee).exists():
+         return Response({"msg" : "You have already sent a request !"}, status=status.HTTP_400_BAD_REQUEST)
+    # How to pevent the company to send a req for it's emp
 
-    req = ReqEmployeeSerializer(data=request.data)
-    if req.is_valid():
-        req.save()
+    request.data.update(company=profile.id, emp=employee.id)
+
+    new_req = ReqEmployeeSerializer(data=request.data)
+    if new_req.is_valid():
+        new_req.save()
         dataResponse = {
         "msg" : "Created Successfully",
-        "req" : req.data
+        "req" : new_req.data
         }
         return Response(dataResponse)
     else:
-        print(req.errors)
+        print(new_req.errors)
         dataResponse = {"msg" : "couldn't add a request"}
         return Response( dataResponse, status=status.HTTP_400_BAD_REQUEST)
 
-# Get Company ID Request - Received  request (for the company the employee belongs to)
+
+# Get Company ID Request - sent
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
-def get_req(request: Request):
+def get_sent(request: Request, profile_id):
     ''' 
     This function is to list all of the requests
     '''
@@ -147,13 +151,40 @@ def get_req(request: Request):
     if not user.is_authenticated:
         return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    req = ReqEmployee.objects.filter(user=user.id)
+    req = ReqEmployee.objects.filter(company= profile_id)
     dataResponse = {
         "msg" : "List of employees requests",
         "req" : ReqEmployeeSerializer(instance=req, many=True).data
     }
 
     return Response(dataResponse)
+
+# Get Company ID Request - recived 
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+def get_received(request: Request, profile_id):
+    ''' 
+    This function is to list all of the requests
+    '''
+
+    user:User = request.user
+    if not user.is_authenticated:
+        return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    emps = Employee.objects.filter(company= profile_id)
+    
+    # if Fav.objects.filter(user=request.user.id , employee=emp).exists():
+
+    # if emp__company_id == profile_id:
+    # req = ReqEmployee.objects.filter(emp= emps)
+
+    dataResponse = {
+        "msg" : "List of employees requests",
+        "req" : ReqEmployeeSerializer(instance=req, many=True).data
+    }
+
+    return Response(dataResponse)
+
 
 
 # Delete ID Request

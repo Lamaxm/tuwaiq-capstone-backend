@@ -129,6 +129,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SIMLE_JWT = {
-    'ACESS_TOKEN_LIFETIME' : timedelta(minutes=30),
+    'ACESS_TOKEN_LIFETIME' : timedelta(days=30),
     'REFRESH_TOKEN_LIFETIME' : timedelta(days=1),
 }
